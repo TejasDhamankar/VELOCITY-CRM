@@ -1,35 +1,41 @@
 'use client';
 
-import { ReactNode, useState } from 'react';
-import DashboardSidebar from './DashboardSidebar';
+import { ReactNode } from 'react';
+import { AppSidebar } from "@/components/app-sidebar";
+import { SidebarInset, SidebarProvider } from "@/components/ui/sidebar";
+import { SiteHeader } from "@/components/site-header";
 import { useAuth } from '@/contexts/AuthContext';
-import { cn } from '@/lib/utils';
+import { Loader2 } from 'lucide-react';
 
 export default function DashboardLayout({ children }: { children: ReactNode }) {
-  const { logout } = useAuth();
-  const [open, setOpen] = useState(false);
+  const { loading: authLoading } = useAuth();
 
-  const handleLogout = () => {
-    if (logout) logout();
-  };
+  if (authLoading) {
+    return (
+      <div className="flex h-screen w-full flex-col items-center justify-center bg-background">
+        <Loader2 className="h-10 w-10 animate-spin text-primary" />
+        <p className="mt-6 text-[10px] font-black uppercase tracking-[0.4em] text-muted-foreground">Synchronizing identity...</p>
+      </div>
+    );
+  }
 
   return (
-    // Use flex-row so Sidebar and Main Content sit side-by-side
-    <div className="flex flex-col md:flex-row bg-[#09090b] w-full flex-1 mx-auto overflow-hidden h-screen">
-      
-      {/* Sidebar - Positioned naturally by flex */}
-      <DashboardSidebar 
-        onLogout={handleLogout} 
-        open={open}
-        setOpen={setOpen}
-      />
+    <SidebarProvider>
+      <div className="flex min-h-screen w-full">
+        {/* This is your new shadcn sidebar replacing the old one */}
+        <AppSidebar />
 
-      {/* Main content area - No more lg:ml-72, flex-1 handles the width */}
-      <main className="flex flex-1 flex-col w-full h-full overflow-y-auto bg-[#09090b]">
-        <div className="p-4 md:p-10 w-full max-w-[1600px] mx-auto">
-          {children}
-        </div>
-      </main>
-    </div>
+        <SidebarInset className="flex flex-col bg-background overflow-x-hidden">
+          {/* SiteHeader handles the Top Bar and Breadcrumbs */}
+          <SiteHeader />
+
+          <main className="flex flex-1 flex-col w-full min-w-0 h-full overflow-y-auto overflow-x-hidden bg-background">
+            <div className="p-4 md:p-10 w-full max-w-[1600px] mx-auto overflow-hidden">
+              {children}
+            </div>
+          </main>
+        </SidebarInset>
+      </div>
+    </SidebarProvider>
   );
 }

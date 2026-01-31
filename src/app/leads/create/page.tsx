@@ -46,6 +46,7 @@ import {
   FileText,
   BookOpen,
   ClipboardList,
+  Save,
   Check,
   AlertCircle
 } from 'lucide-react';
@@ -141,6 +142,7 @@ export default function CreateLeadPage() {
           {field.type === 'text' || field.type === 'date' ? (
             <Input
               type={field.type}
+              className="bg-secondary"
               value={dynamicFields[field.key] || ''}
               onChange={e => handleDynamicFieldChange(field.key, e.target.value)}
               placeholder={`Enter ${field.label.toLowerCase()}`}
@@ -150,12 +152,14 @@ export default function CreateLeadPage() {
               value={dynamicFields[field.key] || ''}
               onValueChange={val => handleDynamicFieldChange(field.key, val)}
             >
-              <SelectTrigger className="bg-white/5 border-white/10 text-white rounded-xl h-12">
-                <SelectValue placeholder="Select" />
-              </SelectTrigger>
-              <SelectContent className="bg-[#09090b] border-white/10 text-white">
-                <SelectItem value="Yes" className="focus:bg-violet-500/20 focus:text-white">Yes</SelectItem>
-                <SelectItem value="No" className="focus:bg-violet-500/20 focus:text-white">No</SelectItem>
+              <FormControl>
+                <SelectTrigger className="bg-secondary">
+                  <SelectValue placeholder="Select" />
+                </SelectTrigger>
+              </FormControl>
+              <SelectContent>
+                <SelectItem value="Yes">Yes</SelectItem>
+                <SelectItem value="No">No</SelectItem>
               </SelectContent>
             </Select>
           )}
@@ -173,11 +177,11 @@ export default function CreateLeadPage() {
             <div className="bg-green-100 dark:bg-green-900/20 p-3 rounded-full w-16 h-16 mx-auto mb-6 flex items-center justify-center">
               <Check className="h-8 w-8 text-green-600 dark:text-green-400" />
             </div>
-            <h2 className="text-2xl font-semibold mb-2">Lead Created Successfully</h2>
-            <p className="text-muted-foreground mb-6">Your new Lead has been created and is now in the system.</p>
+            <h2 className="text-2xl font-semibold mb-2">Lead Profile Created</h2>
+            <p className="text-muted-foreground mb-6">The new lead has been successfully added to your pipeline.</p>
             <div className="flex gap-3 justify-center">
-              <Button onClick={() => router.push('/leads')}>View All Leads</Button>
-              <Button variant="outline" onClick={() => { form.reset(); setSubmitted(false); setDynamicFields({}); }}>Create Another</Button>
+              <Button variant="outline" onClick={() => router.push('/leads')}>View All Leads</Button>
+              <Button onClick={() => { form.reset(); setSubmitted(false); setSelectedType(''); setDynamicFields({}); }}>Add Another Lead</Button>
             </div>
           </motion.div>
         </div>
@@ -187,36 +191,36 @@ export default function CreateLeadPage() {
 
   return (
     <DashboardLayout>
-      <div className="space-y-6">
+      <div className="max-w-4xl mx-auto space-y-8 pb-20">
         <div className="flex items-center gap-3">
           <Button variant="outline" size="icon" onClick={() => router.back()} className="h-9 w-9">
             <ArrowLeft className="h-4 w-4" />
           </Button>
           <div>
-            <h1 className="text-2xl font-bold tracking-tight">Create New Lead</h1>
-            <p className="text-muted-foreground">Enter client information to create a new Lead</p>
+            <h1 className="text-2xl font-semibold tracking-tight">New Lead Profile</h1>
+            <p className="text-sm text-muted-foreground">Capture new client details and case information.</p>
           </div>
         </div>
 
         <Form {...form}>
           <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
             {/* Base Details */}
-            <Card>
+            <Card className="rounded-2xl border shadow-sm bg-card/40">
               <CardHeader>
                 <div className="flex items-center space-x-2">
                   <User className="h-5 w-5 text-muted-foreground" />
-                  <CardTitle>Client Information</CardTitle>
+                  <CardTitle>Client Details</CardTitle>
                 </div>
               </CardHeader>
               <Separator />
-              <CardContent className="pt-6 grid grid-cols-1 md:grid-cols-2 gap-6">
+              <CardContent className="p-6 grid grid-cols-1 md:grid-cols-2 gap-6">
                 {['firstName', 'lastName', 'email', 'phone', 'dateOfBirth', 'address'].map(fieldName => (
                   <FormField key={fieldName} control={form.control} name={fieldName as keyof FormValues} render={({ field }) => (
                     <FormItem>
                       <FormLabel>{fieldName === 'dateOfBirth' ? 'Date of Birth' :
                         fieldName.charAt(0).toUpperCase() + fieldName.slice(1)}</FormLabel>
                       <FormControl>
-                        <Input type={fieldName === 'email' ? 'email' : fieldName === 'dateOfBirth' ? 'date' : 'text'} {...field} />
+                        <Input type={fieldName === 'email' ? 'email' : fieldName === 'dateOfBirth' ? 'date' : 'text'} {...field} className="bg-secondary" />
                       </FormControl>
                       <FormMessage />
                     </FormItem>
@@ -226,15 +230,15 @@ export default function CreateLeadPage() {
             </Card>
 
             {/* Application Type + Status */}
-            <Card>
+            <Card className="rounded-2xl border shadow-sm bg-card/40">
               <CardHeader>
                 <div className="flex items-center space-x-2">
                   <ClipboardList className="h-5 w-5 text-muted-foreground" />
-                  <CardTitle>Lead Details</CardTitle>
+                  <CardTitle>Case Information</CardTitle>
                 </div>
               </CardHeader>
               <Separator />
-              <CardContent className="pt-6 grid grid-cols-1 md:grid-cols-2 gap-6">
+              <CardContent className="p-6 grid grid-cols-1 md:grid-cols-2 gap-6">
                 <FormField control={form.control} name="applicationType" render={({ field }) => (
                   <FormItem>
                     <FormLabel>Application Type*</FormLabel>
@@ -248,10 +252,10 @@ export default function CreateLeadPage() {
                       defaultValue={field.value}
                     >
                       <FormControl>
-                        <SelectTrigger className="bg-white/5 border-white/10 text-white rounded-xl h-12"><SelectValue placeholder="Select application type" /></SelectTrigger>
+                        <SelectTrigger className="bg-secondary"><SelectValue placeholder="Select application type" /></SelectTrigger>
                       </FormControl>
-                      <SelectContent className="bg-[#09090b] border-white/10 text-white">
-                        {APPLICATION_TYPES.map(type => <SelectItem key={type} value={type} className="focus:bg-violet-500/20 focus:text-white">{type}</SelectItem>)}
+                      <SelectContent>
+                        {APPLICATION_TYPES.map(type => <SelectItem key={type} value={type}>{type}</SelectItem>)}
                       </SelectContent>
                     </Select>
                     <FormMessage />
@@ -260,22 +264,21 @@ export default function CreateLeadPage() {
 
                 {/* Replace status dropdown with informational display */}
                 <div>
-                  <div className="flex items-center gap-2 mb-2">
-                    <AlertCircle className="h-4 w-4 text-muted-foreground" />
-                    <span className="text-sm font-medium">Status</span>
-                  </div>
+                  <FormLabel>Status</FormLabel>
                   <div className="flex items-center h-10 px-3 py-2 rounded-md border border-input bg-background text-sm">
                     <span className="text-muted-foreground mr-2">Default:</span>
-                    <span className="font-medium">PENDING</span>
+                    <span className="font-semibold text-foreground">PENDING</span>
                   </div>
-                  <p className="text-xs text-muted-foreground mt-1">Status is set to PENDING by default and can only be updated by an admin.</p>
+                  <p className="text-[11px] text-muted-foreground mt-2">
+                    Status is set automatically and can be updated from the lead's profile.
+                  </p>
                 </div>
 
                 <FormField control={form.control} name="lawsuit" render={({ field }) => (
                   <FormItem className="col-span-2">
                     <FormLabel>Lawsuit (if applicable)</FormLabel>
                     <FormControl>
-                      <Input {...field} placeholder="Enter lawsuit information if relevant" />
+                      <Input {...field} placeholder="Enter lawsuit information if relevant" className="bg-secondary" />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
@@ -288,7 +291,7 @@ export default function CreateLeadPage() {
                       <Textarea
                         placeholder="Add any additional notes about this lead"
                         {...field}
-                        className="min-h-[100px]"
+                        className="bg-secondary min-h-[100px]"
                       />
                     </FormControl>
                     <FormMessage />
@@ -299,33 +302,30 @@ export default function CreateLeadPage() {
 
             {/* Dynamic Fields */}
             {selectedType && DYNAMIC_FIELDS[selectedType] && (
-              <Card>
+              <Card className="rounded-2xl border shadow-sm bg-card/40">
                 <CardHeader>
-                  <CardTitle>Additional Questions for {selectedType}</CardTitle>
-                  <CardDescription>These questions are specific to the selected application type</CardDescription>
+                  <CardTitle>Case-Specific Information</CardTitle>
+                  <CardDescription>Details for the selected application type: <span className="font-semibold text-foreground">{selectedType}</span></CardDescription>
                 </CardHeader>
                 <Separator />
-                <CardContent className="pt-6 grid grid-cols-1 md:grid-cols-2 gap-6">
+                <CardContent className="p-6 grid grid-cols-1 md:grid-cols-2 gap-6">
                   {renderDynamicFields()}
                 </CardContent>
-                <CardFooter className="flex justify-start border-t p-6">
-                  <div className="text-sm text-muted-foreground">
-                    <p>All fields are optional but help provide a complete profile.</p>
-                  </div>
-                </CardFooter>
               </Card>
             )}
 
-            <CardFooter className="flex justify-between border-t p-6">
-              <Button type="button" variant="outline" onClick={() => router.back()}>Cancel</Button>
-              <Button type="submit" disabled={loading} className="min-w-[150px]">
+            <div className="flex justify-end gap-4 pt-4">
+              <Button type="button" variant="ghost" onClick={() => router.back()}>
+                Cancel
+              </Button>
+              <Button type="submit" disabled={loading} className="min-w-[150px] gap-2">
                 {loading ? (
                   <><Loader2 className="mr-2 h-4 w-4 animate-spin" />Creating...</>
                 ) : (
-                  <><Check className="mr-2 h-4 w-4" />Create Lead</>
+                  <><Save className="h-4 w-4" />Save Lead</>
                 )}
               </Button>
-            </CardFooter>
+            </div>
           </form>
         </Form>
       </div>
