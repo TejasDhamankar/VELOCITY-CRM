@@ -97,8 +97,8 @@ export default function DashboardPage() {
                 {/* Dashboard Title & Inset Header Section */}
                 <div className="flex items-center justify-between px-2">
                     <div className="space-y-0.5">
-                        <h1 className="text-2xl font-semibold tracking-tight text-foreground">Operational Protocol</h1>
-                        <p className="text-[13px] text-muted-foreground">Synchronizing metrics for <span className="font-medium text-foreground">{user?.name}</span></p>
+                        <h1 className="text-2xl font-semibold tracking-tight text-foreground">HELLO</h1>
+                        <p className="text-[13px] text-muted-foreground">{user?.name}</p>
                     </div>
                 <Link href="/leads/create">
                     <Button size="sm" className="h-9 rounded-md px-4 text-xs font-semibold gap-2">
@@ -111,7 +111,7 @@ export default function DashboardPage() {
                 <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
                     <Card className="rounded-xl border shadow-sm">
                         <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-                            <CardTitle className="text-xs font-medium text-muted-foreground uppercase tracking-wider">Total Volume</CardTitle>
+                            <CardTitle className="text-xs font-medium text-muted-foreground uppercase tracking-wider">Total Leads</CardTitle>
                             <LayoutDashboard className="h-3.5 w-3.5 text-muted-foreground" />
                         </CardHeader>
                         <CardContent>
@@ -121,7 +121,7 @@ export default function DashboardPage() {
                     </Card>
                     <Card className="rounded-xl border shadow-sm">
                         <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-                            <CardTitle className="text-xs font-medium text-muted-foreground uppercase tracking-wider">Active Pipeline</CardTitle>
+                            <CardTitle className="text-xs font-medium text-muted-foreground uppercase tracking-wider">Pipeline</CardTitle>
                             <TrendingUp className="h-3.5 w-3.5 text-muted-foreground" />
                         </CardHeader>
                         <CardContent>
@@ -158,7 +158,7 @@ export default function DashboardPage() {
                         <CardHeader className="p-6 flex flex-row items-center justify-between">
                             <div className="space-y-0.5">
                                 <CardTitle className="text-sm font-semibold tracking-tight uppercase tracking-widest text-muted-foreground">
-                                    Status Distribution Matrix
+                                    Status Matrix
                                 </CardTitle>
                                 <CardDescription className="text-[10px] font-medium uppercase opacity-60">
                                     Real-time analysis across system states
@@ -225,7 +225,7 @@ export default function DashboardPage() {
                     <Card className="lg:col-span-3 rounded-2xl border shadow-sm bg-card/40">
                         <CardHeader className="p-6 border-b">
                             <CardTitle className="text-sm font-semibold uppercase tracking-widest text-muted-foreground">
-                                Pulse Feed
+                                All Leads
                             </CardTitle>
                         </CardHeader>
                         <CardContent className="p-0 max-h-[360px] overflow-y-auto no-scrollbar">
@@ -255,7 +255,7 @@ export default function DashboardPage() {
                 <div className="space-y-4 px-2 select-none">
                     <div className="flex items-center justify-between">
                         <h2 className="text-[10px] font-semibold uppercase tracking-[0.2em] text-muted-foreground opacity-50">
-                            Status Inventory Matrix // Drag to Explore
+                            Drag to Explore
                         </h2>
                     </div>
 
@@ -313,11 +313,8 @@ export default function DashboardPage() {
                     <Card className="rounded-[2.5rem] border shadow-sm bg-card/40 ring-1 ring-border/50 overflow-hidden">
                         <CardHeader className="p-8 border-b border-border/30">
                             <CardTitle className="text-sm font-semibold uppercase tracking-widest text-muted-foreground">
-                                Conversion Protocol Efficiency
+                            Status Matrix
                             </CardTitle>
-                            <CardDescription className="text-[10px] font-medium uppercase opacity-60">
-                                Drop-off analysis from ingestion to revenue
-                            </CardDescription>
                         </CardHeader>
                         <CardContent className="h-[350px] p-8">
                             <ResponsiveContainer width="100%" height="100%">
@@ -363,11 +360,9 @@ export default function DashboardPage() {
                     <Card className="rounded-[2.5rem] border shadow-sm bg-card/40 ring-1 ring-border/50 overflow-hidden">
                         <CardHeader className="p-8 border-b border-border/30">
                             <CardTitle className="text-sm font-semibold uppercase tracking-widest text-muted-foreground">
-                                Categorical Health Distribution
+                            Status Matrix
                             </CardTitle>
-                            <CardDescription className="text-[10px] font-medium uppercase opacity-60">
-                                Database composition by bucket protocol
-                            </CardDescription>
+                          
                         </CardHeader>
                         <CardContent className="h-[350px] p-0 flex items-center justify-center">
                             <ResponsiveContainer width="100%" height="100%">
