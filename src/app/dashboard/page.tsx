@@ -165,7 +165,7 @@ export default function DashboardPage() {
                                             <p className="text-[10px] text-muted-foreground uppercase">{act.statusHistory.toStatus.replace(/_/g, ' ')}</p>
                                         </div>
                                         <div className="text-[10px] text-muted-foreground font-mono italic">
-                                            {format(new Date(act.statusHistory.timestamp), 'HH:mm')}
+                                            {format(new Date(act.statusHistory.timestamp), 'MM/dd/yyyy hh:mm a')}
                                         </div>
                                     </div>
                                 )) : (

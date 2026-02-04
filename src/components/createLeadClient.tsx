@@ -51,16 +51,34 @@ const APPLICATION_TYPES = Object.keys(DYNAMIC_FIELDS);
 const formSchema = z.object({
   firstName: z.string().min(1, 'First name is required'),
   lastName: z.string().min(1, 'Last name is required'),
-  email: z.string().email('Invalid email address').optional().or(z.literal('')),
-  phone: z.string().optional(),
-  dateOfBirth: z.string().optional(),
-  address: z.string().optional(),
+  email: z.string().min(1, 'Email is required').email('Invalid email address'),
+  phone: z.string().min(1, 'Phone is required'),
+  dateOfBirth: z.string().min(1, 'Date of birth is required'),
+  address: z.string().min(1, 'Address is required'),
   applicationType: z.string().min(1, 'Application type is required'),
   lawsuit: z.string().optional(),
   notes: z.string().optional(),
 });
 
 type FormValues = z.infer<typeof formSchema>;
+
+const placeholders = {
+  firstName: 'Enter first name',
+  lastName: 'Enter last name',
+  email: 'Enter email address',
+  phone: 'Enter phone number',
+  dateOfBirth: 'MM/DD/YYYY',
+  address: 'Enter full address',
+};
+
+const labels = {
+  firstName: 'First Name',
+  lastName: 'Last Name',
+  email: 'Email',
+  phone: 'Phone',
+  dateOfBirth: 'Date of Birth',
+  address: 'Address',
+};
 
 export default function CreateLeadClient() {
   const router = useRouter();
@@ -234,20 +252,20 @@ export default function CreateLeadClient() {
             </CardHeader>
             <Separator />
             <CardContent className="p-4 md:p-6 grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-6">
-              {['firstName', 'lastName', 'email', 'phone', 'dateOfBirth', 'address'].map(fieldName => (
+              {Object.keys(placeholders).map(fieldName => (
                 <FormField
                   key={fieldName}
                   control={form.control}
                   name={fieldName as keyof FormValues}
                   render={({ field }) => (
                     <FormItem className={fieldName === 'address' ? 'md:col-span-2' : ''}>
-                      <FormLabel className="text-sm capitalize">
-                        {fieldName.replace(/([A-Z])/g, ' $1')}
-                        {(fieldName === 'firstName' || fieldName === 'lastName') && '*'}
+                      <FormLabel className="text-sm">
+                        {labels[fieldName as keyof typeof labels]} *
                       </FormLabel>
                       <FormControl>
                         <Input
                           type={fieldName === 'dateOfBirth' ? 'date' : 'text'}
+                          placeholder={placeholders[fieldName as keyof typeof placeholders]}
                           {...field}
                           className="h-10 bg-background"
                         />
