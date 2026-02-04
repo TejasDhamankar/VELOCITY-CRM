@@ -47,19 +47,43 @@ import { DYNAMIC_FIELDS } from '@/lib/dynamic-fields';
 
 const APPLICATION_TYPES = Object.keys(DYNAMIC_FIELDS);
 
+/* =======================
+   ✅ VALIDATION SCHEMA
+======================= */
 const formSchema = z.object({
   firstName: z.string().min(1, 'First name is required'),
   lastName: z.string().min(1, 'Last name is required'),
-  email: z.string().email('Invalid email').optional().or(z.literal('')),
-  phone: z.string().optional(),
-  dateOfBirth: z.string().optional(),
-  address: z.string().optional(),
+  email: z.string().email('Valid email is required'),
+  phone: z.string().min(1, 'Phone number is required'),
+  dateOfBirth: z.string().min(1, 'Date of birth is required'),
+  address: z.string().min(1, 'Address is required'),
   applicationType: z.string().min(1, 'Application type is required'),
   lawsuit: z.string().optional(),
   notes: z.string().optional(),
 });
 
 type FormValues = z.infer<typeof formSchema>;
+
+/* =======================
+   PLACEHOLDERS & LABELS
+======================= */
+const placeholders: Record<string, string> = {
+  firstName: 'Enter first name',
+  lastName: 'Enter last name',
+  email: 'Enter email address',
+  phone: 'Enter phone number',
+  dateOfBirth: 'MM/DD/YYYY',
+  address: 'Enter full address',
+};
+
+const labels: Record<string, string> = {
+  firstName: 'First Name',
+  lastName: 'Last Name',
+  email: 'Email',
+  phone: 'Phone',
+  dateOfBirth: 'Date of Birth',
+  address: 'Address',
+};
 
 export default function PublicLeadPage() {
   const router = useRouter();
@@ -110,9 +134,7 @@ export default function PublicLeadPage() {
 
     setLoading(true);
     try {
-      const formattedDOB = values.dateOfBirth
-        ? formatToMMDDYYYY(values.dateOfBirth)
-        : undefined;
+      const formattedDOB = formatToMMDDYYYY(values.dateOfBirth);
 
       const formattedDynamicFields = { ...dynamicFields };
       (DYNAMIC_FIELDS[selectedType] || []).forEach(field => {
@@ -147,9 +169,9 @@ export default function PublicLeadPage() {
   const renderDynamicFields = () =>
     (DYNAMIC_FIELDS[selectedType] || []).map(field => (
       <FormItem key={field.key}>
-        <FormLabel className="text-sm">
+        <FormLabel>
           {field.label}
-          {field.required && '*'}
+          {field.required && ' *'}
         </FormLabel>
         <FormControl>
           {field.type === 'textarea' ? (
@@ -213,7 +235,7 @@ export default function PublicLeadPage() {
         <Form {...form}>
           <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
 
-            {/* Client Details */}
+            {/* CLIENT DETAILS */}
             <Card>
               <CardHeader>
                 <div className="flex items-center gap-2">
@@ -223,7 +245,7 @@ export default function PublicLeadPage() {
               </CardHeader>
               <Separator />
               <CardContent className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                {['firstName', 'lastName', 'email', 'phone', 'dateOfBirth', 'address'].map(name => (
+                {Object.keys(placeholders).map(name => (
                   <FormField
                     key={name}
                     control={form.control}
@@ -231,12 +253,12 @@ export default function PublicLeadPage() {
                     render={({ field }) => (
                       <FormItem className={name === 'address' ? 'md:col-span-2' : ''}>
                         <FormLabel>
-                          {name.replace(/([A-Z])/g, ' $1')}
-                          {(name === 'firstName' || name === 'lastName') && '*'}
+                          {labels[name]} *
                         </FormLabel>
                         <FormControl>
                           <Input
                             type={name === 'dateOfBirth' ? 'date' : 'text'}
+                            placeholder={placeholders[name]}
                             {...field}
                           />
                         </FormControl>
@@ -248,7 +270,7 @@ export default function PublicLeadPage() {
               </CardContent>
             </Card>
 
-            {/* Case Info */}
+            {/* CASE INFORMATION */}
             <Card>
               <CardHeader>
                 <div className="flex items-center gap-2">
@@ -263,14 +285,13 @@ export default function PublicLeadPage() {
                   name="applicationType"
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel>Application Type*</FormLabel>
+                      <FormLabel>Application Type *</FormLabel>
                       <Select
                         onValueChange={val => {
                           field.onChange(val);
                           setSelectedType(val);
                           setDynamicFields({});
                         }}
-                        defaultValue={field.value}
                       >
                         <FormControl>
                           <SelectTrigger>
@@ -285,13 +306,14 @@ export default function PublicLeadPage() {
                           ))}
                         </SelectContent>
                       </Select>
+                      <FormMessage />
                     </FormItem>
                   )}
                 />
               </CardContent>
             </Card>
 
-            {/* Case Specific */}
+            {/* CASE SPECIFIC */}
             {selectedType && (
               <Card>
                 <CardHeader>

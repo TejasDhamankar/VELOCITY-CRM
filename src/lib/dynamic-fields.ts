@@ -47,7 +47,22 @@ export const DYNAMIC_FIELDS: Record<
     { key: 'dob', label: 'Date of Birth', type: 'date', required: true },
     { key: 'address', label: 'Address', type: 'text', required: true },
     { key: 'incidentDate', label: 'Date of Incident', type: 'date', required: true },
-    { key: 'typeOfAssault', label: 'Type of Assault', type: 'text', required: true },
+    {
+      key: 'typeOfAssault',
+      label: 'Type of Assault',
+      type: 'radio',
+      required: true,
+      options: [
+        { label: 'Exposure of genitals', value: 'Exposure of genitals' },
+        { label: 'Fondling', value: 'Fondling' },
+        { label: 'Inappropriate Touching', value: 'Inappropriate Touching' },
+        { label: 'Kissing', value: 'Kissing' },
+        { label: 'Masturbation', value: 'Masturbation' },
+        { label: 'Oral Sex', value: 'Oral Sex' },
+        { label: 'Penetration', value: 'Penetration' },
+        { label: 'Sexual Intercourse', value: 'Sexual Intercourse' },
+      ]
+    },
     { key: 'proofOfRide', label: 'Proof of Ride?', type: 'radio', required: true, options: [
         { label: 'Yes', value: 'yes' },
         { label: 'No', value: 'no' }
